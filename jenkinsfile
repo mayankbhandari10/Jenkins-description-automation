@@ -6,7 +6,6 @@ pipeline {
             steps {
                 script {
                     def logText = """This is a sample log.
-                    Error: This is the error message we want to capture.
                     More log text here.
                     """
 
