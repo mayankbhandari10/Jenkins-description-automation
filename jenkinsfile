@@ -8,8 +8,11 @@ pipeline {
                     def logText = """This is a sample log.
                     More log text here.
                     """
+                    def consoleLog = currentBuild.rawBuild.getLog(1000)
 
                     def errorPattern = /Error: (.*)/
+                    echo "Console Log:"
+                    echo consoleLog
 
                     if (logText =~ errorPattern) {
                         def errorMessage = (logText =~ errorPattern)[0][1]
