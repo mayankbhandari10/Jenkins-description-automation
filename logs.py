@@ -1,17 +1,24 @@
-import sys
-import re  # Import the 're' module for regular expressions
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                sh 'make' // Example build step
+            }
+        }
+        stage('Post-build Actions') {
+            steps {
+                script {
+                    // Define Log Parser rules
+                    def logParserRules = '''\
+                        error /ERROR/
+                        warning /WARNING/
+                    '''
 
-# Read the build log from stdin
-build_log = sys.stdin.read()
-
-# Define the pattern to search for
-pattern = r"java\.io\.IOException: CreateProcess error=\d+, The system cannot find the file specified"
-
-# Search for the pattern in the build log using regular expressions
-if re.search(pattern, build_log):
-    # Print the pattern if found
-    print(f"Pattern Found: {pattern}")
-    sys.exit(1)  # Exit with a non-zero status code to indicate failure
-else:
-    print("Pattern Not Found")
-    sys.exit(0)  # Exit with a zero status code to indicate success
+                    // Parse the build log using Log Parser
+                    logParser(text: currentBuild.rawBuild.getLogReader('console'), ruleFile: [class: 'String', value: logParserRules], unstableOnWarning: true, failBuildOnError: true)
+                }
+            }
+        }
+    }
+}

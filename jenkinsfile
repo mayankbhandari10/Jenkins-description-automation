@@ -8,8 +8,16 @@ pipeline {
         }
         stage('Post-build Actions') {
             steps {
-                // Use the Log Parser Plugin to parse the build log
-                logParser(parserName: 'MyLogParser', failBuildOnError: true)
+                script {
+                    // Define Log Parser rules
+                    def logParserRules = '''\
+                        error /ERROR/
+                        warning /WARNING/
+                    '''
+
+                    // Parse the build log using Log Parser
+                    logParser(text: currentBuild.rawBuild.getLogReader('console'), ruleFile: [class: 'String', value: logParserRules], unstableOnWarning: true, failBuildOnError: true)
+                }
             }
         }
     }
