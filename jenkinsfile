@@ -4,8 +4,8 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo("+kkkkkk")
-                sh aad
+                // Run your build steps here
+                sh 'your_build_command_here'
             }
         }
         // Add other stages for testing and deploying
