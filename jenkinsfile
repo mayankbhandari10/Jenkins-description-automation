@@ -4,10 +4,10 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-
                 script {
                     // Run your build steps here
-                    sh abs
+                    sh 'abs' // Run your command here
+
                     // Capture the console output
                     def consoleLog = currentBuild.rawBuild.getLog(1000)
 
@@ -20,6 +20,9 @@ pipeline {
                     // Print the reversed console log
                     echo "Reversed Console Log:"
                     echo reversedConsoleLogString
+
+                    // Intentionally fail the build
+                    error("This build intentionally failed.")
                 }
             }
         }
