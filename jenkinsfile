@@ -15,8 +15,11 @@ pipeline {
                 // Capture the build log into a variable
                 def buildLog = currentBuild.rawBuild.getLog(10000).reverse().join('\n')
 
+                // Specify the full path to the Python executable
+                def pythonExecutable = 'C:\Users\mayan\OneDrive\Desktop\Jenkins-description-automation\logs.py'  // Replace with the actual path
+
                 // Execute the Python script and pass the build log as a parameter
-                def result = sh(script: "python logs.py '''${buildLog}'''", returnStatus: true).trim()
+                def result = sh(script: "${pythonExecutable} logs.py '''${buildLog}'''", returnStatus: true).trim()
 
                 if (result.startsWith("Pattern Found")) {
                     // Extract the pattern from the result
