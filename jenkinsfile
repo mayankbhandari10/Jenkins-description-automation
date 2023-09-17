@@ -12,7 +12,13 @@ pipeline {
     post {
         failure {
             script {
-                currentBuild.description = "Build Failed: An error occurred during the build"
+                // Capture the build log into a variable
+                def buildLog = currentBuild.rawBuild.getLog(10000).reverse().join('\n')
+
+                // Print the captured build log for debugging
+                echo "Build Log: \n${buildLog}"
+
+                currentBuild.description = "Build Failed: Check the build log"
             }
         }
     }
