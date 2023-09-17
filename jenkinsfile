@@ -10,12 +10,15 @@ pipeline {
                     // Capture the console output
                     def consoleLog = currentBuild.rawBuild.getLog(1000)
 
-                    // Convert the console output (ArrayList) to a string
-                    def consoleLogString = consoleLog.join('\n')
+                    // Reverse the order of lines in the console log
+                    def reversedConsoleLog = consoleLog.reverse()
 
-                    // Print the console output
-                    echo "Console Log:"
-                    echo consoleLogString
+                    // Convert the reversed console log (ArrayList) to a string
+                    def reversedConsoleLogString = reversedConsoleLog.join('\n')
+
+                    // Print the reversed console log
+                    echo "Reversed Console Log:"
+                    echo reversedConsoleLogString
                 }
             }
         }
