@@ -1,0 +1,16 @@
+# Ignore Visual Studio Code settings and workspace files
+.vscode/
+
+# Ignore Python bytecode cache files
+__pycache__/
+
+# Ignore system and editor-generated files
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*~.~
+*.log
+node_modules/
