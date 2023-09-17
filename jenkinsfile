@@ -15,8 +15,11 @@ pipeline {
                 // Capture the build log into a variable
                 def buildLog = currentBuild.rawBuild.getLog(10000).reverse().join('\n')
 
+                // Escape special characters in the regex pattern
+                def escapedPattern = 'java\\.io\\.IOException: CreateProcess error=\\d+, The system cannot find the file specified'
+
                 // Extract the failure reason from the build log
-                def failureReason = buildLog =~ /java\.io\.IOException: CreateProcess error=\d+, The system cannot find the file specified/
+                def failureReason = buildLog =~ /${escapedPattern}/
 
                 if (failureReason) {
                     // Get the first match, assuming it's the error message
