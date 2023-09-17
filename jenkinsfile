@@ -2,28 +2,9 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Hello') {
             steps {
-                // Capture the build log into a variable
-                script {
-                    def buildLog = currentBuild.rawBuild.getLog(10000).reverse().join('\n')
-                    echo "Printing the logs"
-                    sh "asn" // Corrected the 'sh' step syntax
-
-                    // Execute the Python script and pass the build log as a parameter
-                    def result = sh(script: "python my_script.py '''${buildLog}'''", returnStatus: true).trim()
-
-                    // Update build description with the result
-                    currentBuild.description = "Error: ${result}"
-                }
-            }
-        }
-    }
-
-    post {
-        always {
-            script {
-                // Your post-build actions here
+                echo 'Hello World'    
             }
         }
     }
