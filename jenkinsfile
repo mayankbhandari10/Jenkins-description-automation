@@ -15,16 +15,13 @@ pipeline {
                 // Capture the build log into a variable
                 def buildLog = currentBuild.rawBuild.getLog(10000).reverse().join('\n')
 
-                // Escape special characters in the regex pattern
-                def escapedPattern = 'java\\.io\\.IOException: CreateProcess error=\\d+, The system cannot find the file specified'
+                // Execute the Python script and pass the build log as stdin
+                def result = bat(script: "python search_pattern.py", stdin: buildLog).trim()
 
-                // Extract the failure reason from the build log
-                def failureReason = buildLog =~ /${escapedPattern}/
-
-                if (failureReason) {
-                    // Get the first match, assuming it's the error message
-                    def errorMessage = failureReason[0][0] ?: "Unknown Error"
-                    currentBuild.description = "Build Failed: ${errorMessage}"
+                if (result.startsWith("Pattern Found")) {
+                    // Extract the pattern from the result
+                    def patternFound = result.split(":")[1].trim()
+                    currentBuild.description = "Build Failed: ${patternFound}"
                 } else {
                     currentBuild.description = "Build Failed: Unknown Reason"
                 }

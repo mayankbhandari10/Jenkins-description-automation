@@ -1,26 +1,16 @@
-# my_script.py
-import re
 import sys
 
+# Read the build log from stdin
+build_log = sys.stdin.read()
 
-def main(build_log):
-    # Define the pattern to search for
-    pattern = r"Error: (.+)"
+# Define the pattern to search for
+pattern = r"java\.io\.IOException: CreateProcess error=\d+, The system cannot find the file specified"
 
-    # Search for the pattern in the build log
-    match = re.search(pattern, build_log)
-
-    # Return the matched error message if found, or a default message
-    if match:
-        return match.group(1)
-    else:
-        return "No error message found in the build log."
-
-
-if __name__ == "__main__":
-    # Read the build log from the command-line argument
-    build_log = sys.argv[1]
-
-    # Call the main function and print the result
-    result = main(build_log)
-    print(result)
+# Search for the pattern in the build log
+if pattern in build_log:
+    # Print the pattern if found
+    print(f"Pattern Found: {pattern}")
+    sys.exit(1)  # Exit with a non-zero status code to indicate failure
+else:
+    print("Pattern Not Found")
+    sys.exit(0)  # Exit with a zero status code to indicate success
