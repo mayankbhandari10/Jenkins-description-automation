@@ -4,25 +4,22 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                script {
-                    // Run your build steps here
-                    sh 'abs' // Run your command here
+                // Build your code here
+            }
+        }
+        // Add other stages for testing and deploying
+    }
 
-                    // Capture the console output
-                    def consoleLog = currentBuild.rawBuild.getLog(1000)
-
-                    // Reverse the order of lines in the console log
-                    def reversedConsoleLog = consoleLog.reverse()
-
-                    // Convert the reversed console log (ArrayList) to a string
-                    def reversedConsoleLogString = reversedConsoleLog.join('\n')
-
-                    // Print the reversed console log
-                    echo "Reversed Console Log:"
-                    echo reversedConsoleLogString
-
-                    // Intentionally fail the build
-                    error("This build intentionally failed.")
+    post {
+        failure {
+            script {
+                // This block will execute when the build fails
+                def failureReason = currentBuild.rawBuild.getLog(1000).find { line -> line.contains("Error:") }
+                if (failureReason) {
+                    def description = "Build failed due to: ${failureReason}"
+                    currentBuild.description = description
+                } else {
+                    currentBuild.description = "Build failed (reason not found)"
                 }
             }
         }
