@@ -5,20 +5,17 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    def logText = """This is a sample log.
-                    More log text here.
-                    """
+                    // Run your build steps here
+
+                    // Capture the console output
                     def consoleLog = currentBuild.rawBuild.getLog(1000)
 
-                    def errorPattern = /Error: (.*)/
-                    echo "Console Log:"
-                    echo consoleLog
+                    // Convert the console output (ArrayList) to a string
+                    def consoleLogString = consoleLog.join('\n')
 
-                    if (logText =~ errorPattern) {
-                        def errorMessage = (logText =~ errorPattern)[0][1]
-                        currentBuild.description = "Error: ${errorMessage}"
-                        error("Error: ${errorMessage}")
-                    }
+                    // Print the console output
+                    echo "Console Log:"
+                    echo consoleLogString
                 }
             }
         }
