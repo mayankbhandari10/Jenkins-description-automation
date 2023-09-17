@@ -13,7 +13,7 @@ pipeline {
         failure {
             script {
                 // Capture the build log into a variable
-                def buildLog = currentBuild.rawBuild.getLog(10000).reverse().join('\n')
+                def buildLog = currentBuild.rawBuild.getLog().reverse().join('\n')
 
                 // Print the captured build log for debugging
                 echo "Build Log: \n${buildLog}"
