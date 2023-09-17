@@ -7,7 +7,7 @@ pipeline {
                 // Capture the build log into a variable
                 script {
                     def buildLog = currentBuild.rawBuild.getLog(10000).reverse().join('\n')
-
+                    echo"printing the lOgs"
                     // Execute the Python script and pass the build log as a parameter
                     def result = sh(script: "python my_script.py '''${buildLog}'''", returnStatus: true).trim()
 
