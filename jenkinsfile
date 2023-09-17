@@ -5,12 +5,17 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    try {
-                        sh dfs
-                    } catch (Exception e) {
-                        // Capture the error message
-                        currentBuild.description = "Build Failed: ${e.message}"
-                        throw e
+                    def logText = """This is a sample log.
+                    Error: This is the error message we want to capture.
+                    More log text here.
+                    """
+
+                    def errorPattern = /Error: (.*)/
+
+                    if (logText =~ errorPattern) {
+                        def errorMessage = (logText =~ errorPattern)[0][1]
+                        currentBuild.description = "Error: ${errorMessage}"
+                        error("Error: ${errorMessage}")
                     }
                 }
             }
