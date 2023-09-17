@@ -18,10 +18,10 @@ pipeline {
                 // Extract the failure reason from the build log
                 def failureReason = buildLog =~ /java\.io\.IOException: CreateProcess error=\d+, The system cannot find the file specified/
 
-
                 if (failureReason) {
-                    // Update build description with the failure reason
-                    currentBuild.description = "Build Failed: ${failureReason}"
+                    // Get the first match, assuming it's the error message
+                    def errorMessage = failureReason[0][0] ?: "Unknown Error"
+                    currentBuild.description = "Build Failed: ${errorMessage}"
                 } else {
                     currentBuild.description = "Build Failed: Unknown Reason"
                 }
