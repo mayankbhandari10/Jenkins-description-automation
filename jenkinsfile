@@ -12,22 +12,7 @@ pipeline {
     post {
         failure {
             script {
-                // Capture the build log into a variable
-                def buildLog = currentBuild.rawBuild.getLog(10000).reverse().join('\n')
-
-                // Specify the full path to the Python executable
-                def pythonExecutable = 'logs.py'  // Replace with the actual path
-
-                // Execute the Python script and pass the build log as a parameter
-                def result = sh(script: "${pythonExecutable} logs.py '''${buildLog}'''", returnStatus: true).trim()
-
-                if (result.startsWith("Pattern Found")) {
-                    // Extract the pattern from the result
-                    def patternFound = result.split(":")[1].trim()
-                    currentBuild.description = "Build Failed: ${patternFound}"
-                } else {
-                    currentBuild.description = "Build Failed: Unknown Reason"
-                }
+                currentBuild.description = "Build Failed: An error occurred during the build"
             }
         }
     }
