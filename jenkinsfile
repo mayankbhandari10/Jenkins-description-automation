@@ -16,7 +16,8 @@ pipeline {
                 def buildLog = currentBuild.rawBuild.getLog(10000).reverse().join('\n')
 
                 // Extract the failure reason from the build log
-                def failureReason = buildLog =~ /Simulating Build Failure/
+                def failureReason = buildLog =~ /java\.io\.IOException: CreateProcess error=\d+, The system cannot find the file specified/
+
 
                 if (failureReason) {
                     // Update build description with the failure reason
