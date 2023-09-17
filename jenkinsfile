@@ -16,7 +16,7 @@ pipeline {
                 def buildLog = currentBuild.rawBuild.getLog(10000).reverse().join('\n')
 
                 // Execute the Python script and pass the build log as a parameter
-                def result = bat(script: "python logs.py '''${buildLog}'''", returnStatus: true).trim()
+                def result = sh(script: "python logs.py '''${buildLog}'''", returnStatus: true).trim()
 
                 if (result.startsWith("Pattern Found")) {
                     // Extract the pattern from the result
