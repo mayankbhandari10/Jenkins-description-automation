@@ -2,9 +2,28 @@ pipeline {
     agent any
 
     stages {
-        stage('Hello') {
+        stage('Build') {
             steps {
-                echo 'Hello World'    
+                sh 'echo "Simulating Build Failure" && exit 1'
+            }
+        }
+    }
+
+    post {
+        failure {
+            script {
+                // Capture the build log into a variable
+                def buildLog = currentBuild.rawBuild.getLog(10000).reverse().join('\n')
+
+                // Extract the failure reason from the build log
+                def failureReason = buildLog =~ /Simulating Build Failure/
+
+                if (failureReason) {
+                    // Update build description with the failure reason
+                    currentBuild.description = "Build Failed: ${failureReason}"
+                } else {
+                    currentBuild.description = "Build Failed: Unknown Reason"
+                }
             }
         }
     }
