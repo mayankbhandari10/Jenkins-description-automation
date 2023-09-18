@@ -1,6 +1,11 @@
+def patterns = [
+    'exception': 'Caused: java\\.io\\.IOException: Cannot run program "nohup"',
+    'Error 2': 'error_pattern2'
+]
+
 pipeline {
     agent any
-    
+
     stages {
         stage('Build') {
             steps {
@@ -21,30 +26,25 @@ pipeline {
             }
         }
     }
-    
+
     post {
         always {
-            // Load the YAML content as a Map
             script {
-                def patterns = load 'patterns.yml'
-                
                 // Collect the matching lines in a variable
                 def matchingLines = []
-                
+
                 // Parse the log to find error messages and exceptions
                 def log = currentBuild.rawBuild.getLog(1000) // Adjust the number to read enough lines
-                
+
                 log.each { line ->
                     // Check each pattern against the log line
-                    patterns.each { key, value ->
-                        def name = value.name
-                        def regex = value.regex
+                    patterns.each { name, regex ->
                         if (line =~ regex) {
                             matchingLines.add("Matching Pattern: ${name}\n${line}")
                         }
                     }
                 }
-                
+
                 // Set the build description to the matching lines
                 if (matchingLines) {
                     currentBuild.description = matchingLines.join('\n')
