@@ -1,0 +1,5 @@
+- name: exception
+  regex: 'Caused: java\.io\.IOException: Cannot run program "nohup"'
+
+- name: Error 2
+  regex: 'error_pattern2'
