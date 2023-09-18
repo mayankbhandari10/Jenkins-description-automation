@@ -27,7 +27,7 @@ pipeline {
             // Read the regex patterns from the YAML file using readFile and evaluate
             script {
                 def yamlContent = readFile('patterns.yml')
-                def patterns = evaluate(new groovy.util.ConfigSlurper().parse(yamlContent))
+                def patterns = new groovy.util.ConfigSlurper().parse(yamlContent)
                 
                 // Collect the matching lines in a variable
                 def matchingLines = []
@@ -37,9 +37,9 @@ pipeline {
                 
                 log.each { line ->
                     // Check each pattern against the log line
-                    patterns.each { name, regex ->
-                        if (line =~ regex) {
-                            matchingLines.add("Matching Pattern: ${name}\n${line}")
+                    patterns.each { pattern ->
+                        if (line =~ pattern.regex) {
+                            matchingLines.add("Matching Pattern: ${pattern.name}\n${line}")
                         }
                     }
                 }
