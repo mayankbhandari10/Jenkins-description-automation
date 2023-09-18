@@ -24,8 +24,8 @@ pipeline {
     
     post {
         always {
-            // Read the regex patterns from the YAML file
-            def patterns = readYaml file: 'patterns.yml'
+            // Read the regex patterns from the YAML file using Groovy
+            def patterns = loadYaml file: 'patterns.yml'
             
             // Collect the error messages and check for exceptions
             script {
