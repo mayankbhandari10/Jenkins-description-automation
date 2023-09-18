@@ -1,10 +1,8 @@
+@Library('your-shared-library') // Replace 'your-shared-library' with the actual name of your shared library
 
-
-import jenkins.model.*
-jenkins = Jenkins.instance
 pipeline {
     agent any
-    
+
     stages {
         stage('Build') {
             steps {
@@ -25,38 +23,18 @@ pipeline {
             }
         }
     }
-    
+
     post {
         always {
-            // Load the YAML content as a Map and convert to JSON
             script {
-                def patterns = readYaml file: 'patterns.yml'
-                echo "Contents of patterns.yml as JSON:"
-                def patternsJson = groovy.json.JsonOutput.toJson(patterns)
-                echo patternsJson // Print as JSON
-                
-                // Collect the matching lines in a variable
-                def matchingLines = []
-                
-                // Parse the log to find error messages and exceptions
-                def log = currentBuild.rawBuild.getLog(1000) // Adjust the number to read enough lines
-                
-                log.each { line ->
-                    // Check each pattern against the log line
-                    def parsedPatterns = groovy.json.JsonSlurper().parseText(patternsJson)
-                    parsedPatterns.each { key, value ->
-                        def name = key
-                        def regex = value
-                        if (line =~ regex) {
-                            matchingLines.add("Matching Pattern: ${name}\n${line}")
-                        }
-                    }
-                }
-                
-                // Set the build description to the matching lines
-                if (matchingLines) {
-                    currentBuild.description = matchingLines.join('\n')
-                }
+                // Define your logs (assuming 'logs' variable contains the log lines)
+                def logs = currentBuild.rawBuild.getLog(1000) // Adjust the number to read enough lines
+
+                // Call the shared library function to match patterns
+                def description = customMatcher(logs: logs)
+
+                // Set the build description to the result
+                currentBuild.description = description
             }
         }
     }
