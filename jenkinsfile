@@ -1,22 +1,64 @@
 pipeline {
     agent any
+    
     stages {
         stage('Build') {
             steps {
-                sh 'make' // Example build step
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    // This block captures errors during the build
+                    echo "ERROR: This is an example error message"
+                    error 'This is an intentional error'
+                    sh 'echo "This stage has a syntax error"'
+                }
             }
         }
-        stage('Post-build Actions') {
+        stage('Excep') {
             steps {
-                script {
-                    // Define Log Parser rules
-                    def logParserRules = '''\
-                        error /ERROR/
-                        warning /WARNING/
-                    '''
-
-                    // Parse the build log using Log Parser
-                    logParser(text: currentBuild.rawBuild.getLogReader('console'), ruleFile: [class: 'String', value: logParserRules], unstableOnWarning: true, failBuildOnError: true)
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                    // This block captures errors in the 'Excep' stage
+                    sh 'your_command_that_may_produce_exceptions'
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            // Read the regex patterns from the YAML file
+            def patterns = readYaml file: 'patterns.yml'
+            
+            // Collect the error messages and check for exceptions
+            script {
+                def log = currentBuild.rawBuild.getLog(1000) // Adjust the number to read enough lines
+                
+                // Initialize variables to store the last error message and exception
+                def lastErrorMessage = ""
+                def lastException = ""
+                
+                // Parse the log to find error messages and exceptions
+                log.each { line ->
+                    if (line.contains('ERROR:')) {
+                        lastErrorMessage = line
+                    }
+                    
+                    // Check for exceptions in the log
+                    if (line.contains('Exception:')) {
+                        lastException = line
+                    }
+                    
+                    // Check each pattern against the log line
+                    patterns.each { pattern ->
+                        if (line =~ pattern.regex) {
+                            currentBuild.description = "Matching Pattern: ${pattern.name}\n${line}"
+                        }
+                    }
+                }
+                
+                // Set the build description to the last error message or exception
+                if (lastErrorMessage) {
+                    currentBuild.description = "Last Error:\n${lastErrorMessage}"
+                } else if (lastException) {
+                    currentBuild.description = "Last Exception:\n${lastException}"
                 }
             }
         }
