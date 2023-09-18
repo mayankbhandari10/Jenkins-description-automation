@@ -5,7 +5,7 @@ def call(Map config) {
     def patterns = [
         'exception': 'Caused: java\\.io\\.IOException: Cannot run program "nohup"',
         'Error 2': 'error_pattern2',
-        'not found': 'groovy\.lang\.MissingPropertyException: No such property: \w+ for class: groovy\.lang\.Binding'
+        'not found': 'groovy\\.lang\\.MissingPropertyException: No such property: \\w+ for class: groovy\\.lang\\.Binding'
         //o Add more patterns as needed
     ]
 
