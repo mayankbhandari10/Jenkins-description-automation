@@ -29,37 +29,24 @@ pipeline {
                 def yamlContent = readFile('patterns.yml')
                 def patterns = evaluate(new groovy.util.ConfigSlurper().parse(yamlContent))
                 
-                // Collect the error messages and check for exceptions
-                def log = currentBuild.rawBuild.getLog(1000) // Adjust the number to read enough lines
-                
-                // Initialize variables to store the last error message and exception
-                def lastErrorMessage = ""
-                def lastException = ""
+                // Collect the matching lines in a variable
+                def matchingLines = []
                 
                 // Parse the log to find error messages and exceptions
+                def log = currentBuild.rawBuild.getLog(1000) // Adjust the number to read enough lines
+                
                 log.each { line ->
-                    if (line.contains('ERROR:')) {
-                        lastErrorMessage = line
-                    }
-                    
-                    // Check for exceptions in the log
-                    if (line.contains('Exception:')) {
-                        lastException = line
-                    }
-                    
                     // Check each pattern against the log line
                     patterns.each { name, regex ->
                         if (line =~ regex) {
-                            buildDescription = "Matching Pattern: ${name}\n${line}"
+                            matchingLines.add("Matching Pattern: ${name}\n${line}")
                         }
                     }
                 }
                 
-                // Set the build description to the last error message or exception
-                if (lastErrorMessage) {
-                    buildDescription = "Last Error:\n${lastErrorMessage}"
-                } else if (lastException) {
-                    buildDescription = "Last Exception:\n${lastException}"
+                // Set the build description to the matching lines
+                if (matchingLines) {
+                    currentBuild.description = matchingLines.join('\n')
                 }
             }
         }
