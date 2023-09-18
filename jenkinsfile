@@ -1,7 +1,6 @@
-
 pipeline {
     agent any
-    
+
     stages {
         stage('Build') {
             steps {
@@ -22,22 +21,22 @@ pipeline {
             }
         }
     }
-    
+
     post {
         always {
-            // Load the YAML content as a Map and convert to JSON
+            // Load the YAML content as a Map
             script {
                 def patterns = readYaml file: 'patterns.yml'
                 echo "Contents of patterns.yml as JSON:"
                 def patternsJson = groovy.json.JsonOutput.toJson(patterns)
                 echo patternsJson // Print as JSON
-                
+
                 // Collect the matching lines in a variable
                 def matchingLines = []
-                
+
                 // Parse the log to find error messages and exceptions
                 def log = currentBuild.rawBuild.getLog(1000) // Adjust the number to read enough lines
-                
+
                 log.each { line ->
                     // Check each pattern against the log line
                     def parsedPatterns = groovy.json.JsonSlurper().parseText(patternsJson)
@@ -49,7 +48,7 @@ pipeline {
                         }
                     }
                 }
-                
+
                 // Set the build description to the matching lines
                 if (matchingLines) {
                     currentBuild.description = matchingLines.join('\n')
