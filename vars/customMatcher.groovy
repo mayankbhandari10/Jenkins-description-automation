@@ -1,11 +1,12 @@
-// vars/customMatcher.groovy
+
 
 def call(Map config) {
     def logs = config.logs
     def patterns = [
         'exception': 'Caused: java\\.io\\.IOException: Cannot run program "nohup"',
-        'Error 2': 'error_pattern2'
-        // Add more patterns as needed
+        'Error 2': 'error_pattern2',
+        'not found': 'groovy\.lang\.MissingPropertyException'
+        //o Add more patterns as needed
     ]
 
     def matchingLines = []
