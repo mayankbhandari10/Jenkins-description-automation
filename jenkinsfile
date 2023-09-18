@@ -24,11 +24,12 @@ pipeline {
     
     post {
         always {
-            // Load the YAML content as a Map and print it as JSON
+            // Load the YAML content as a Map and convert to JSON
             script {
                 def patterns = readYaml file: 'patterns.yml'
                 echo "Contents of patterns.yml as JSON:"
-                echo groovy.json.JsonOutput.toJson(patterns) // Print as JSON
+                def patternsJson = groovy.json.JsonOutput.toJson(patterns)
+                echo patternsJson // Print as JSON
                 
                 // Collect the matching lines in a variable
                 def matchingLines = []
@@ -38,7 +39,8 @@ pipeline {
                 
                 log.each { line ->
                     // Check each pattern against the log line
-                    patterns.each { key, value ->
+                    def parsedPatterns = groovy.json.JsonSlurper().parseText(patternsJson)
+                    parsedPatterns.each { key, value ->
                         def name = key
                         def regex = value
                         if (line =~ regex) {
@@ -50,7 +52,6 @@ pipeline {
                 // Set the build description to the matching lines
                 if (matchingLines) {
                     currentBuild.description = matchingLines.join('\n')
-
                 }
             }
         }
