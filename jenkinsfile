@@ -25,28 +25,30 @@ pipeline {
     post {
         always {
             // Load the YAML content as a Map
-            def patterns = load 'patterns.yml'
-            
-            // Collect the matching lines in a variable
-            def matchingLines = []
-            
-            // Parse the log to find error messages and exceptions
-            def log = currentBuild.rawBuild.getLog(1000) // Adjust the number to read enough lines
-            
-            log.each { line ->
-                // Check each pattern against the log line
-                patterns.each { key, value ->
-                    def name = value.name
-                    def regex = value.regex
-                    if (line =~ regex) {
-                        matchingLines.add("Matching Pattern: ${name}\n${line}")
+            script {
+                def patterns = load 'patterns.yml'
+                
+                // Collect the matching lines in a variable
+                def matchingLines = []
+                
+                // Parse the log to find error messages and exceptions
+                def log = currentBuild.rawBuild.getLog(1000) // Adjust the number to read enough lines
+                
+                log.each { line ->
+                    // Check each pattern against the log line
+                    patterns.each { key, value ->
+                        def name = value.name
+                        def regex = value.regex
+                        if (line =~ regex) {
+                            matchingLines.add("Matching Pattern: ${name}\n${line}")
+                        }
                     }
                 }
-            }
-            
-            // Set the build description to the matching lines
-            if (matchingLines) {
-                currentBuild.description = matchingLines.join('\n')
+                
+                // Set the build description to the matching lines
+                if (matchingLines) {
+                    currentBuild.description = matchingLines.join('\n')
+                }
             }
         }
     }
