@@ -50,16 +50,16 @@ pipeline {
                     // Check each pattern against the log line
                     patterns.each { name, regex ->
                         if (line =~ regex) {
-                            currentBuild.description = "Matching Pattern: ${name}\n${line}"
+                            buildDescription = "Matching Pattern: ${name}\n${line}"
                         }
                     }
                 }
                 
                 // Set the build description to the last error message or exception
                 if (lastErrorMessage) {
-                    currentBuild.description = "Last Error:\n${lastErrorMessage}"
+                    buildDescription = "Last Error:\n${lastErrorMessage}"
                 } else if (lastException) {
-                    currentBuild.description = "Last Exception:\n${lastException}"
+                    buildDescription = "Last Exception:\n${lastException}"
                 }
             }
         }
