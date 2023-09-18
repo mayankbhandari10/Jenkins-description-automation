@@ -23,8 +23,9 @@ def call(Map config) {
 
     if (matchingLines.isEmpty()) {
         // If no patterns matched, provide a default message
-        return "Build is failed !! Please check the logs for reasons"
+        return "This build failed because of the following reasons:\nBuild is failed !! Please check the logs for reasons"
     } else {
-        return matchingLines.join('\n')
+        // If patterns matched, prepend the message to the matching lines
+        return "This build failed because of the following reasons:\n${matchingLines.join('\n')}"
     }
 }
