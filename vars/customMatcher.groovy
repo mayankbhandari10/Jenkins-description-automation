@@ -21,6 +21,10 @@ def call(Map config) {
         }
     }
 
-    return matchingLines.join('\n')
+    if (matchingLines.isEmpty()) {
+        // If no patterns matched, provide a default message
+        return "Build is failed !! Please check the logs for reasons"
+    } else {
+        return matchingLines.join('\n')
+    }
 }
-
