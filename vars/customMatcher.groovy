@@ -34,8 +34,8 @@ def showDescription(Map config) {
 
 def searchAndReturnMessage(line, keyword) {
     if (line.contains(keyword)) {
-        matchingLines.add("Build Failure unit test case failed:${line}")
+        return "Build Failure unit test case failed: ${line}"
     } else {
-        return "Keyword '$keyword' not found in the line."
+        return "Keyword '${keyword}' not found in the line."
     }
 }
