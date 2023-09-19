@@ -1,4 +1,7 @@
 def showDescription(Map config) {
+    text='Caused: java.io.IOException: Cannot run program "nohup"'
+    keyword="IOException"
+    
     def logs = config.logs
     def patterns = [
         'exception': 'Caused: java.io.IOException: Cannot run program "nohup"',
@@ -25,5 +28,14 @@ def showDescription(Map config) {
     } else {
         // If patterns matched, prepend the message to the matching lines
         return "This build failed because of the following reasons:\n${matchingLines.join('\n')}"
+    }
+    
+}
+
+def searchAndReturnMessage(line, keyword) {
+    if (line.contains(keyword)) {
+        return "Unit test failure"
+    } else {
+        return "Keyword '$keyword' not found in the line."
     }
 }
