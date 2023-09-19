@@ -9,8 +9,6 @@ def myCustomFunction(Map config) {
         'executor error': 'jenkins.util.ErrorLoggingExecutorService'
     ]
 
-    // Add more patterns as needed
-
     def matchingLines = []
 
     logs.each { line ->
