@@ -14,7 +14,7 @@ def myCustomFunction(Map config) {
     logs.each { line ->
         patterns.each { name, regex ->
             if (line =~ regex) {
-                matchingLines.add("Matching Pattern: ${name}\n${line}")
+                matchingLines.add("Build Failure: ${name}\n${line}")
             }
         }
     }
