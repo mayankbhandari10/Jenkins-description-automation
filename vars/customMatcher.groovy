@@ -1,6 +1,6 @@
 def showDescription(Map config) {
-    text='Caused: java.io.IOException: Cannot run program "nohup"'
-    keyword="IOException"
+    text='java.lang.ArithmeticException: Division by zero'
+    keyword="ArithmeticException"
     
     def logs = config.logs
     def patterns = [
