@@ -1,7 +1,7 @@
 def showDescription(Map config) {
     text = 'java.lang.ArithmeticException: Division by zero'
     keyword = "ArithmeticException"
-    
+
     def logs = config.logs
     def patterns = [
         'maths error': 'java.lang.ArithmeticException: Division by zero',
@@ -46,3 +46,14 @@ def patternActions = [
     'maths error': { line, keyword -> searchAndReturnMessage(line, keyword) },
     // Add more pattern actions here as needed
 ]
+
+// Sample usage
+def config = [
+    logs: [
+        'java.lang.ArithmeticException: Division by zero',
+        'Some other log line',
+    ]
+]
+
+def description = showDescription(config)
+println description
