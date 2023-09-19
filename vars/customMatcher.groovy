@@ -10,7 +10,7 @@ def myCustomFunction(Map config) {
     ]
 
     def matchingLines = []
-
+    //match operator
     logs.each { line ->
         patterns.each { name, regex ->
             if (line =~ regex) {
