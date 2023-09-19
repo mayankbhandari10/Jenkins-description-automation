@@ -1,4 +1,4 @@
-def myCustomFunction(Map config) {
+def call(Map config) {
     def logs = config.logs
     def patterns = [
         'exception': 'Caused: java.io.IOException: Cannot run program "nohup"',
