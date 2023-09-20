@@ -9,7 +9,9 @@ def showDescription(Map config) {
         //'not found': 'groovy.lang.MissingPropertyException: No such property: \\w+ for class: groovy.lang.Binding',
         'Unit test failed': 'java.lang.ArithmeticException: Division by zero',
         //'Assertation error': 'java.lang.AssertionError',
-        //'executor error': 'jenkins.util.ErrorLoggingExecutorService'
+        //'executor error': 'jenkins.util.ErrorLoggingExecutorService',
+        'Unit test failed': 'Execution failed for task'
+        
     ]
 
     def matchingLines = []
