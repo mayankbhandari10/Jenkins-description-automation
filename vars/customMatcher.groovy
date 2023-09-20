@@ -34,8 +34,3 @@ def showDescription(Map config) {
         return ""
     }
 }
-
-// Example usage:
-// Call showDescription with the build status and logs
-def description = showDescription(buildStatus: currentBuild.resultIsWorseOrEqualTo('FAILURE') ? 'FAILURE' : 'SUCCESS', logs: currentBuild.rawBuild.getLog(10000).reverse())
-println(description)
