@@ -1,5 +1,4 @@
 def showDescription() {
-    
     def logs = retrieveLogs()
     def buildStatus = retrieveBuildStatus()
 
