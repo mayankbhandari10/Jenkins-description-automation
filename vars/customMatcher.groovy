@@ -1,5 +1,5 @@
 def showDescription() {
-    echo "****Inside the Method ****"
+    
     def logs = retrieveLogs()
     def buildStatus = retrieveBuildStatus()
 
