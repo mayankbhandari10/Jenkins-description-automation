@@ -1,6 +1,9 @@
 def showDescription() {
     def logs = retrieveLogs()
+    
     def buildStatus = retrieveBuildStatus()
+    echo"buildStatus"
+    echo buildStatus
 
     def patterns = [
         'Artifactory (TLS handshake) issue': 'curl: (35) Encountered end of file',
